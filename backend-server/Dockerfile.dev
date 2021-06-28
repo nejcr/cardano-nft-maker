@@ -1,0 +1,10 @@
+FROM node:latest
+
+WORKDIR /usr/src/app
+
+
+ENV PORT 8043
+
+EXPOSE 8043
+
+ENTRYPOINT /bin/bash

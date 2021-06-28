@@ -1,0 +1,70 @@
+version: "3"
+services:
+  cardano-node:
+    image: inputoutput/cardano-node:1.26.2
+    networks:
+      - backend
+    environment:
+      NETWORK:
+      WORKING_DIR: ~/cardano
+    volumes:
+      - ${WORKING_DIR}/node-${NETWORK}-db:/data
+      - ${WORKING_DIR}/node-ipc:/ipc
+      - node-config:/nix/store
+    restart: on-failure
+    logging:
+      driver: "json-file"
+      options:
+        compress: "true"
+        max-file: "10"
+        max-size: "50m"
+
+  backend-server:
+    build:
+      context: backend-server
+      dockerfile: Dockerfile.app
+    ports:
+      - "8042:8042"
+    depends_on:
+      - cardano-node
+    environment:
+      NETWORK:
+      WORKING_DIR: ~/cardano
+      CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
+      DOCKER_MODE: 'app'
+    volumes:
+      - ${WORKING_DIR}/node-${NETWORK}-db:/data
+      - ${WORKING_DIR}/node-ipc:/ipc
+      - node-config:/nix/store
+    networks:
+      - backend
+
+  cardano_dev_environment:
+    build:
+      context: backend-server
+      dockerfile: Dockerfile.dev
+    container_name: cardano_dev_environment
+    environment:
+      NETWORK:
+      WORKING_DIR: ~/cardano
+      CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
+      DOCKER_MODE: 'dev'
+    ports:
+      - 8043:8043
+    networks:
+      - backend
+    volumes:
+      - ./backend-server:/usr/src/app
+      - ${WORKING_DIR}/node-${NETWORK}-db:/data
+      - ${WORKING_DIR}/node-ipc:/ipc
+      - node-config:/nix/store
+
+networks:
+  backend:
+    driver: bridge
+
+volumes:
+  node-mainnet-db:
+  node-testnet-db:
+  node-ipc:
+  node-config:
