@@ -1,110 +1,20 @@
-import {AspectRatio, Box, BoxProps, forwardRef, Heading, Input, Stack, Text} from "@chakra-ui/react";
+import {AspectRatio, Box, BoxProps, Button, forwardRef, Heading, Input, Stack, Text} from "@chakra-ui/react";
 import {motion, useAnimation} from "framer-motion";
-import {useRef} from "react";
+import React, {EventHandler} from "react";
 import cardanoKids from "./kidz.jpg"
 import hoskinsons from "./hoskin.jpg"
 import spacebud from "./spacebud.jpg"
+import {PreviewImage, previewImageStyles} from "./PreviewImage";
 
-const first = {
-    rest: {
-        rotate: "-15deg",
-        scale: 0.95,
-        x: "-50%",
-        filter: "grayscale(80%)",
-        transition: {
-            duration: 0.5,
-            type: "tween",
-            ease: "easeIn"
-        }
-    },
-    hover: {
-        x: "-70%",
-        scale: 1.1,
-        rotate: "-20deg",
-        filter: "grayscale(0%)",
-        transition: {
-            duration: 0.4,
-            type: "tween",
-            ease: "easeOut"
-        }
-    }
-};
 
-const second = {
-    rest: {
-        rotate: "15deg",
-        scale: 0.95,
-        x: "50%",
-        filter: "grayscale(80%)",
-        transition: {
-            duration: 0.5,
-            type: "tween",
-            ease: "easeIn"
-        }
-    },
-    hover: {
-        x: "70%",
-        scale: 1.1,
-        rotate: "20deg",
-        filter: "grayscale(0%)",
-        transition: {
-            duration: 0.4,
-            type: "tween",
-            ease: "easeOut"
-        }
-    }
-};
 
-const third = {
-    rest: {
-        scale: 1.1,
-        filter: "grayscale(80%)",
-        transition: {
-            duration: 0.5,
-            type: "tween",
-            ease: "easeIn"
-        }
-    },
-    hover: {
-        scale: 1.3,
-        filter: "grayscale(0%)",
-        transition: {
-            duration: 0.4,
-            type: "tween",
-            ease: "easeOut"
-        }
-    }
-};
-
-const PreviewImage = forwardRef<BoxProps, typeof Box>((props, ref) => {
-    return (
-        <Box
-            bg="white"
-            top="0"
-            height="100%"
-            width="100%"
-            position="absolute"
-            borderWidth="1px"
-            borderStyle="solid"
-            rounded="sm"
-            borderColor="gray.400"
-            as={motion.div}
-            backgroundSize="cover"
-            backgroundRepeat="no-repeat"
-            backgroundPosition="center"
-            {...props}
-            ref={ref}
-        />
-    );
-});
-const FileUpload = () => {
-    const inputRef = useRef();
+const FileUpload = ({onFileSelect}: { onFileSelect: EventHandler<any> }) => {
     const controls = useAnimation();
     const startAnimation = () => controls.start("hover");
     const stopAnimation = () => controls.stop();
 
     return (
-        <AspectRatio width="64" ratio={1}>
+        <AspectRatio width={"250px"} ratio={1} height={"300px"}>
             <Box
                 borderColor="gray.300"
                 borderStyle="dashed"
@@ -141,16 +51,16 @@ const FileUpload = () => {
                         >
                             <Box height="16" width="12" position="relative">
                                 <PreviewImage
-                                    variants={first}
+                                    variants={previewImageStyles.left}
                                     backgroundImage={`url(${cardanoKids.src})`}
                                 />
                                 <PreviewImage
-                                    variants={second}
+                                    variants={previewImageStyles.middle}
                                     backgroundImage={`url(${hoskinsons.src})`}
 
                                 />
                                 <PreviewImage
-                                    variants={third}
+                                    variants={previewImageStyles.right}
                                     backgroundImage={`url(${spacebud.src})`}
                                 />
                             </Box>
@@ -161,6 +71,7 @@ const FileUpload = () => {
                                 <Text fontWeight="light">or click to upload</Text>
                             </Stack>
                         </Stack>
+
                     </Box>
                     <Input
                         type="file"
@@ -172,12 +83,15 @@ const FileUpload = () => {
                         opacity="0"
                         aria-hidden="true"
                         accept="image/*"
-                        onDrop={e => console.log(e)}
+                        onDrop={onFileSelect}
+                        onChange={onFileSelect}
                         onDragEnter={startAnimation}
                         onDragLeave={stopAnimation}
                     />
+
                 </Box>
             </Box>
+
         </AspectRatio>
     );
 }

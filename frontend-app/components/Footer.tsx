@@ -4,8 +4,8 @@ import {Box, Flex, Heading, SimpleGrid} from "@chakra-ui/react";
 export const Footer = () => (
 
 
-    <SimpleGrid columns={[1, 2]} height={"100%"}  >
-        <Flex direction={"column"} justify={"center"}  fontSize="sm" alignItems={"center"}>
+    <SimpleGrid columns={[1, 2]} height={"100%"} mr={[0, "4rem"]}>
+        <Flex direction={"column"} justify={"center"} fontSize="sm" alignItems={"center"} mr={[0, "4rem"]}>
             <Heading size={"md"}>Nejc Ravnik</Heading>
             <Box fontSize="sm" pl={[0, 14]}>
                 &copy; nr4599@student.uni-lj.si
@@ -13,7 +13,7 @@ export const Footer = () => (
         </Flex>
 
 
-        <Flex direction={"column"} justify={"center"}  fontSize="sm" alignItems={"center"}>Fakulteta za
+        <Flex direction={"column"} justify={"center"} fontSize="sm" alignItems={"center"}>Fakulteta za
             računalništvo
             in informatiko, Ljubljana 2021
         </Flex>
