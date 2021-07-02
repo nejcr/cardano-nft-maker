@@ -8,7 +8,7 @@ interface FieldGroupProps extends StackProps {
 
 export interface MintTokenFormProps {
     file?: File,
-    onClose?: Function
+    onClose: Function
 }
 
 export const FieldGroup = (props: FieldGroupProps) => {
@@ -27,6 +27,26 @@ export const FieldGroup = (props: FieldGroupProps) => {
     )
 }
 
+function validateAgainstPrevious(array: Array<{ key: string, value: string }>) {
+    console.log(array, "a")
+    return true
+}
+
+Yup.addMethod(Yup.array, 'allUnique', function (message) {
+    return this.test('allUnique', message, (values: Array<{ key: string, value: string }> | undefined) => {
+        const keys = values?.map(item => item.key);
+        const hasDuplicateKeys = (new Set(keys)).size !== keys?.length;
+
+        return !hasDuplicateKeys
+    });
+});
+
 export const validationSchema = Yup.object({
     assetName: Yup.string().required("Asset name is required"),
+    metadata: Yup.array(
+        Yup.object({
+            key: Yup.string().required("Key is required"),
+            value: Yup.string().required("Value is required"),
+            // @ts-ignore
+        })).allUnique("All keys should be unique")
 });

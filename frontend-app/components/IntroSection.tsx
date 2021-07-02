@@ -31,7 +31,7 @@ export const IntroSection = () => {
 
                 <ModalCloseButton />
                 <ModalBody>
-                    <MintTokenForm file={file}/>
+                    <MintTokenForm file={file} onClose={onClose}/>
                 </ModalBody>
 
             </ModalContent>
