@@ -39,6 +39,21 @@ services:
     networks:
       - backend
 
+
+  cardano_frontend_app:
+    build:
+      context: frontend-app
+      dockerfile: Dockerfile
+    container_name: frontend-app
+    depends_on:
+      - backend-server
+    ports:
+    - "3001:3000"
+    networks:
+      - backend
+
+
+
   cardano_dev_environment:
     build:
       context: backend-server
