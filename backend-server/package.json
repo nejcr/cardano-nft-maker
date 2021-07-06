@@ -9,7 +9,13 @@
   "author": "nejcr",
   "license": "MIT",
   "dependencies": {
+    "arweave": "^1.10.15",
     "cardanocli-js": "^3.1.2",
-    "express": "^4.17.1"
-  }
+    "express": "^4.17.1",
+    "express-validator": "^6.12.0",
+    "lodash": "^4.17.21",
+    "lowdb": "^2.1.0",
+    "uuid": "^8.3.2"
+  },
+  "type": "module"
 }
