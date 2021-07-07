@@ -1,8 +1,9 @@
 #!/bin/bash
-network="testnet"
 
-if [[ $1 == 'mainnet' ]]; then
-  network="mainnet"
-fi
+envs=$(./init.sh)
 
-NETWORK="${network}" docker-compose up --no-deps --build cardano-node backend-server
+envs=($envs)
+working_dir=${envs[0]}
+network=${envs[1]}
+
+WORKING_DIR="${working_dir}" NETWORK="${network}" docker-compose up --no-deps --build cardano-node backend-server

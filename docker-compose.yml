@@ -6,7 +6,7 @@ services:
       - backend
     environment:
       NETWORK:
-      WORKING_DIR: ~/cardano
+      WORKING_DIR: ~/cardano-nft-maker
     volumes:
       - ${WORKING_DIR}/node-${NETWORK}-db:/data
       - ${WORKING_DIR}/node-ipc:/ipc
@@ -29,7 +29,7 @@ services:
       - cardano-node
     environment:
       NETWORK:
-      WORKING_DIR: ~/cardano
+      WORKING_DIR: ~/cardano-nft-maker
       CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
       DOCKER_MODE: 'app'
     volumes:
@@ -61,7 +61,7 @@ services:
     container_name: cardano_dev_environment
     environment:
       NETWORK:
-      WORKING_DIR: ~/cardano
+      WORKING_DIR: ~/cardano-nft-maker
       CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
       DOCKER_MODE: 'dev'
     ports:

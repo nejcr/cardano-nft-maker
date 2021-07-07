@@ -2,18 +2,37 @@ import Arweave from "arweave";
 import cardanoCli from "cardanocli-js";
 import { join } from "path";
 import { JSONFileSync, LowSync } from "lowdb";
+import fs from "fs";
+
+const files = fs
+  .readdirSync("./")
+  .filter((fn) => fn.startsWith("arweave-key-"));
+const arweaweFile = files[0];
+export const myArweaveAddress = arweaweFile.match(
+  new RegExp("arweave-key-" + "(.*)" + ".json")
+)[1];
+
+const dir = process.env.NETWORK === "mainnet" ? "./mainnet" : "./testnet";
+const network =
+  process.env.NETWORK === "mainnet" ? "mainnet" : "testnet-magic 1097911063";
+
+const shelleyGenesisPath =
+  process.env.NETWORK === "mainnet"
+    ? "./mainnet-shelley-genesis.json"
+    : "./testnet-shelley-genesis.json";
+
+const walletName = process.env.NETWORK === "mainnet" ? "main" : "test";
+
+const dbName =
+  process.env.NETWORK === "mainnet" ? "main-db.json" : "test-db.json";
 
 export const cli = new cardanoCli({
-  network: "testnet-magic 1097911063",
-  dir: "./testnet",
-  shelleyGenesisPath: "./testnet-shelley-genesis.json",
+  network: network,
+  dir: dir,
+  shelleyGenesisPath: shelleyGenesisPath,
   cliPath: "./cardano-cli",
   socketPath: "/ipc/node.socket",
 });
-
-// Since v1.5.1 you're now able to call the init function for the web version without options. The current path will be used by default, recommended.
-
-export const myArweaveAddress = "teTpHHt9Isv-_JDTyvtBTpd39_pY9r0-FZtoexCDFSY";
 
 export const arweave = Arweave.init({
   host: "arweave.net", // Hostname or IP address for a Arweave host
@@ -23,10 +42,10 @@ export const arweave = Arweave.init({
   logging: false, // Enable network request logging
 });
 
-export const wallet = cli.wallet("test");
+export const wallet = cli.wallet(walletName);
 
 // Use JSON file for storage
-const file = join(".", "db.json");
+const file = join(".", dbName);
 
 export const db = new LowSync(new JSONFileSync(file));
 

@@ -43,13 +43,16 @@ export const service = {
 
     let arweaveBalance = arweave.ar.winstonToAr(winstonBalance);
     const totalBalance = {
+
       cardano: {
+        network: process.env.network,
         address: wallet.paymentAddr,
         numberOfUtxos: utxos.length,
         lovelaceAmount: lovelaceBalance,
         adaAmount: cli.toAda(lovelaceBalance),
       },
       arweave: {
+        network:"mainnet",
         address: myArweaveAddress,
         arweaveBalance: arweaveBalance,
         winstonBalanece: winstonBalance,
