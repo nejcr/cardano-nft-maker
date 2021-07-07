@@ -1,39 +1,25 @@
 import express from "express";
-import { arweave, cli, myArweaveAddress, wallet } from "./config.js";
 import {
   apiErrorHandler,
   mintRequestValidationSchema,
 } from "./apiValidation.js";
 import { service } from "./service.js";
+import cors from "cors";
 
 const PORT = process.env.DOCKER_MODE === "dev" ? 8043 : 8042;
 
 const app = express();
 app.use(express.json());
+app.use(cors());
 
-app.get("/balance", async (req, res) => {
-  let lovelaceBalance = 0;
-  const utxos = wallet.balance().utxo;
-  for (let utxo of utxos) {
-    const lovelaceAmount = utxo?.value?.lovelace ?? 0;
-    lovelaceBalance += lovelaceAmount;
-  }
-  const winstonBalance = await arweave.wallets.getBalance(myArweaveAddress);
+app.get("/status", async (req, res) => {
+  const response = await service.getStatus();
+  res.send(response);
+});
 
-  let arweaveBalance = arweave.ar.winstonToAr(winstonBalance);
-  const totalBalance = {
-    cardano: {
-      numberOfUtxos: utxos.length,
-      lovelaceAmount: lovelaceBalance,
-      adaAmount: cli.toAda(lovelaceBalance),
-    },
-    arweave: {
-      arweaveBalance: arweaveBalance,
-      winstonBalanece: winstonBalance,
-    },
-  };
-
-  res.send(totalBalance);
+app.get("/mint/:id", async (req, res) => {
+  const response = await service.getMint(req?.params?.id);
+  res.send(response);
 });
 
 app.post(

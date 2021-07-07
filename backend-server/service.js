@@ -1,6 +1,6 @@
 import lodash from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { db } from "./config.js";
+import { arweave, cli, db, myArweaveAddress, wallet } from "./config.js";
 
 export const statuses = {
   MINT_CREATED: "mint_created",
@@ -9,6 +9,9 @@ export const statuses = {
 };
 
 export const service = {
+  getMint: async (id) => {
+    return 42;
+  },
   createMint: async (request) => {
     const { assetName, metadata } = request;
     const id = uuidv4().toString();
@@ -27,5 +30,36 @@ export const service = {
     db.read();
     db.chain = lodash.chain(db.data);
     return db.chain.get("mintingRequests").find({ id: id }).value();
+  },
+  getStatus: async (request) => {
+    let lovelaceBalance = 0;
+
+    const utxos = wallet.balance().utxo;
+    for (let utxo of utxos) {
+      const lovelaceAmount = utxo?.value?.lovelace ?? 0;
+      lovelaceBalance += lovelaceAmount;
+    }
+    const winstonBalance = await arweave.wallets.getBalance(myArweaveAddress);
+
+    let arweaveBalance = arweave.ar.winstonToAr(winstonBalance);
+    const totalBalance = {
+      cardano: {
+        address: wallet.paymentAddr,
+        numberOfUtxos: utxos.length,
+        lovelaceAmount: lovelaceBalance,
+        adaAmount: cli.toAda(lovelaceBalance),
+      },
+      arweave: {
+        address: myArweaveAddress,
+        arweaveBalance: arweaveBalance,
+        winstonBalanece: winstonBalance,
+      },
+      status: {
+        cardanoStatus: cli.queryTip(),
+        arweaveStatus: await arweave.network.getInfo(),
+      },
+    };
+
+    return totalBalance;
   },
 };

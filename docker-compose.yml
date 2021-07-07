@@ -73,22 +73,6 @@ services:
       - ${WORKING_DIR}/node-${NETWORK}-db:/data
       - ${WORKING_DIR}/node-ipc:/ipc
       - node-config:/nix/store
-#  arweave-node:
-#    build:
-#      context: arweave
-#      dockerfile: Dockerfile
-#    restart: on-failure
-#    ports:
-#      - 1984:1984
-#    depends_on:
-#      - cardano-node
-#    environment:
-#      NETWORK:
-#      WORKING_DIR: ~/cardano
-#      CARDANO_NODE_SOCKET_PATH: /ipc/node.socket
-#      DOCKER_MODE: 'app'
-#    networks:
-#      - backend
 networks:
   backend:
     driver: bridge
