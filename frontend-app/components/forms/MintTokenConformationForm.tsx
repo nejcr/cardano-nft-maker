@@ -10,12 +10,12 @@ import {
 } from '@chakra-ui/react';
 
 export function MintTokenConformationForm({
-  submissionData,
+  onConfirm,
   onClose,
   isOpen,
 }: {
-  submissionData: any;
   isOpen: boolean;
+  onConfirm: () => void;
   onClose: () => void;
 }) {
   const cancelRef = React.useRef(null);
@@ -38,7 +38,7 @@ export function MintTokenConformationForm({
             </AlertDialogBody>
 
             <AlertDialogFooter>
-              <Button colorScheme={'blue'} onClick={onClose}>
+              <Button colorScheme={'blue'} onClick={onConfirm}>
                 Yes
               </Button>
               <Button ref={cancelRef} onClick={onClose} ml={3}>

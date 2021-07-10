@@ -16,7 +16,7 @@ export const mintRequestValidationSchema = [
       min: 3,
       max: 16,
     })
-    .withMessage("must be between 5 and 16"),
+    .withMessage("must be between 3 and 16"),
   check(
     "metadata",
     "passwordConfirmation field must have the same value as the password field"

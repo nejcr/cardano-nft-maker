@@ -7,7 +7,7 @@ interface FieldGroupProps extends StackProps {
 }
 
 export interface MintTokenFormProps {
-  file?: File;
+  file: File;
   onClose: Function;
 }
 
@@ -51,7 +51,10 @@ Yup.addMethod(Yup.array, 'allUnique', function (message) {
 });
 
 export const validationSchema = Yup.object({
-  assetName: Yup.string().required('Asset name is required'),
+  assetName: Yup.string()
+    .required('Asset name is required')
+    .min(3, 'Minimum 3 characters')
+    .max(16, 'Maximum 16 characters'),
   metadata: Yup.array(
     Yup.object({
       key: Yup.string().required('Key is required'),

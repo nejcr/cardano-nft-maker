@@ -25,33 +25,53 @@ import {
 import InputControl from './core/InputControl';
 import { formatBytes } from '../../utils/utils';
 import { MintTokenConformationForm } from './MintTokenConformationForm';
+import { postMint } from '../../api/api';
+import { useMutation } from 'react-query';
 
+export type MintSubmissionProps = {
+  values: {
+    assetName: string;
+    metadata: Array<{ key: string; value: string }>;
+  };
+  file: File;
+};
 export const MintTokenForm = (props: MintTokenFormProps) => {
   const { isOpen: formConfirmationOpened, onOpen, onClose } = useDisclosure();
-  const [formConfirmationState, setFormConfirmationState] = React.useState();
+  const initialFormState = { assetName: '', metadata: [] };
+  const initialFormSubmission = {
+    values: initialFormState,
+    file: props.file,
+  };
+  const [formConfirmationState, setFormConfirmationState] =
+    React.useState<MintSubmissionProps>(initialFormSubmission);
 
   const color = useColorModeValue('gray.500', 'whiteAlpha.600');
   const onFormConfirmationClose = () => {
     onClose();
-    setFormConfirmationState(undefined);
+    setFormConfirmationState(initialFormSubmission);
   };
 
   const onFormConfirmationOpen = (values: any) => {
     onOpen();
-    setFormConfirmationState(values);
+    setFormConfirmationState({ values: values, file: props.file });
   };
+
+  const postMintMutation = useMutation((submissionData: MintSubmissionProps) =>
+    postMint('/mint', submissionData)
+  );
+
   const fileSrc = URL.createObjectURL(props.file);
 
   return (
     <Box px={{ base: '4', md: '10' }} py="16" maxWidth="3xl" mx="auto">
       <MintTokenConformationForm
-        submissionData={formConfirmationState}
+        onConfirm={() => postMintMutation.mutate(formConfirmationState)}
         isOpen={formConfirmationOpened}
         onClose={onFormConfirmationClose}
       />
 
       <Formik
-        initialValues={{ assetName: '', metadata: [{ key: 'x', value: 'y' }] }}
+        initialValues={initialFormState}
         onSubmit={onFormConfirmationOpen}
         validationSchema={validationSchema}
       >
@@ -155,14 +175,18 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
                         <Image
                           objectFit="cover"
                           boxSize="300px"
-                          alt={"Your uploaded image preview"}
+                          alt={'Your uploaded image preview'}
                           src={fileSrc}
                         />
                       }
                       fontSize="md"
                       placement={'top-end'}
                     >
-                      <Avatar size="xl" name="Your uploaded image" src={fileSrc} />
+                      <Avatar
+                        size="xl"
+                        name="Your uploaded image"
+                        src={fileSrc}
+                      />
                     </Tooltip>
 
                     <Box>

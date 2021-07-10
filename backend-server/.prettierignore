@@ -1,0 +1,5 @@
+/node_modules/
+/mainnet/
+/testnet/
+testnet-shelley-genesis.json
+mainnet-shelley-genesis.json

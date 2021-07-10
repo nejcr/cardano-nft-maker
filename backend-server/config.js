@@ -4,14 +4,8 @@ import { join } from "path";
 import { JSONFileSync, LowSync } from "lowdb";
 import fs from "fs";
 
-const files = fs
-  .readdirSync("./")
-  .filter((fn) => fn.startsWith("arweave-key-"));
-const arweaweFile = files[0];
-export const myArweaveAddress = arweaweFile.match(
-  new RegExp("arweave-key-" + "(.*)" + ".json")
-)[1];
-
+const arweaveKeyInFile = fs.readFileSync("./arweave-key.json", "utf8");
+export const arweaveKey = JSON.parse(arweaveKeyInFile);
 const dir = process.env.NETWORK === "mainnet" ? "./mainnet" : "./testnet";
 const network =
   process.env.NETWORK === "mainnet" ? "mainnet" : "testnet-magic 1097911063";
@@ -41,6 +35,8 @@ export const arweave = Arweave.init({
   timeout: 20000, // Network request timeouts in milliseconds
   logging: false, // Enable network request logging
 });
+
+export const arweaveAddress = await arweave.wallets.jwkToAddress(arweaveKey);
 
 export const wallet = cli.wallet(walletName);
 

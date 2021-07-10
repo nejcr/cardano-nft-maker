@@ -1,6 +1,7 @@
 import lodash from "lodash";
 import { v4 as uuidv4 } from "uuid";
-import { arweave, cli, db, myArweaveAddress, wallet } from "./config.js";
+import { arweave, arweaveAddress, cli, db, wallet } from "./config.js";
+import { blockchain } from "./blockchain.js";
 
 export const statuses = {
   MINT_CREATED: "mint_created",
@@ -13,7 +14,7 @@ export const service = {
     return 42;
   },
   createMint: async (request) => {
-    const { assetName, metadata } = request;
+    const { assetName, metadata, file } = request;
     const id = uuidv4().toString();
     const mintingData = {
       id: id,
@@ -29,6 +30,9 @@ export const service = {
     db.write();
     db.read();
     db.chain = lodash.chain(db.data);
+    blockchain.store(id, file).then((arweaveId) => {
+      blockchain.mint(id, arweaveId);
+    });
     return db.chain.get("mintingRequests").find({ id: id }).value();
   },
   getStatus: async (request) => {
@@ -39,11 +43,10 @@ export const service = {
       const lovelaceAmount = utxo?.value?.lovelace ?? 0;
       lovelaceBalance += lovelaceAmount;
     }
-    const winstonBalance = await arweave.wallets.getBalance(myArweaveAddress);
+    const winstonBalance = await arweave.wallets.getBalance(arweaveAddress);
 
     let arweaveBalance = arweave.ar.winstonToAr(winstonBalance);
     const totalBalance = {
-
       cardano: {
         network: process.env.network,
         address: wallet.paymentAddr,
@@ -52,8 +55,8 @@ export const service = {
         adaAmount: cli.toAda(lovelaceBalance),
       },
       arweave: {
-        network:"mainnet",
-        address: myArweaveAddress,
+        network: "mainnet",
+        address: arweaveAddress,
         arweaveBalance: arweaveBalance,
         winstonBalanece: winstonBalance,
       },

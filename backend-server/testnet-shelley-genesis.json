@@ -21,7 +21,7 @@
     "keyDeposit": 2000000,
     "nOpt": 150,
     "rho": 0.003,
-    "tau": 0.20,
+    "tau": 0.2,
     "a0": 0.3
   },
   "genDelegs": {
@@ -56,9 +56,7 @@
   },
   "updateQuorum": 5,
   "networkId": "Testnet",
-  "initialFunds": {
-    
-  },
+  "initialFunds": {},
   "maxLovelaceSupply": 45000000000000000,
   "networkMagic": 1097911063,
   "epochLength": 432000,
