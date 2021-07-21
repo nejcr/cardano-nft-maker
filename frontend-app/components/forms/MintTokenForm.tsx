@@ -56,8 +56,9 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
     setFormConfirmationState({ values: values, file: props.file });
   };
 
-  const postMintMutation = useMutation((submissionData: MintSubmissionProps) =>
-    postMint('/mint', submissionData)
+  const postMintMutation = useMutation(
+    (submissionData: MintSubmissionProps) => postMint('/mint', submissionData),
+    { onError: (error:any) => console.log(error?.response.data) }
   );
 
   const fileSrc = URL.createObjectURL(props.file);

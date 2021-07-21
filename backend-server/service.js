@@ -14,6 +14,7 @@ export const service = {
     return 42;
   },
   createMint: async (request) => {
+    console.log(request)
     const { assetName, metadata, file } = request;
     const id = uuidv4().toString();
     const mintingData = {

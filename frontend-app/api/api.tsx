@@ -4,8 +4,11 @@ import { MintSubmissionProps } from '../components/forms/MintTokenForm';
 import { fileToBase64 } from '../utils/utils';
 
 export const axiosClient = axios.create({
-  baseURL: 'http://localhost:8043/',
-  timeout: 4000,
+  baseURL: 'http://localhost:8043',
+  headers:{
+    'Content-Type':'application/json'
+  },
+  timeout: 5000,
 });
 
 export const postMint = async (url: string, body: MintSubmissionProps) => {
@@ -19,6 +22,9 @@ export const postMint = async (url: string, body: MintSubmissionProps) => {
 export default function useBalance() {
   return useQuery(
     'balance',
-    async () => (await axiosClient.get('/status')).data
+    async () => (await axiosClient.get('/status')).data,
+    {
+      keepPreviousData: true,
+    }
   );
 }

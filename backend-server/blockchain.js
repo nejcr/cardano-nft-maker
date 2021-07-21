@@ -43,6 +43,7 @@ export const blockchain = {
       );
     }
 
+    console.log(transaction) 
     console.log(ipfsCid);
     console.log(`https://ipfs.io/ipfs/${ipfsCid}`);
 
