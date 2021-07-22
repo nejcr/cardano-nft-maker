@@ -11,11 +11,11 @@ import {
   useColorModeValue,
   useDisclosure,
 } from '@chakra-ui/react';
-import useBalance from '../api/api';
 import { WalletInfo } from './WalletInfo';
 import React from 'react';
 import { ChakraNextLink } from './ChrakraNextLink';
 import { useRouter } from 'next/router';
+import { useBalance } from '../api/api';
 
 export type ContainerProps = {
   title: string;

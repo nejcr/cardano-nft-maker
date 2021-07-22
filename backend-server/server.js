@@ -24,6 +24,11 @@ app.get("/mint/:id", async (req, res) => {
   res.send(response);
 });
 
+app.get("/mints", async (req, res) => {
+  const response = await service.getMints();
+  res.send(response);
+});
+
 app.post(
   "/mint",
   mintRequestValidationSchema,

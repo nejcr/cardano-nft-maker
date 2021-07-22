@@ -43,12 +43,12 @@ export const blockchain = {
       );
     }
 
-    console.log(transaction) 
+    console.log(transaction);
     console.log(ipfsCid);
     console.log(`https://ipfs.io/ipfs/${ipfsCid}`);
 
     unlinkSync(fullFileName);
-    return transaction.id;
+    return { transaction, ipfsCid };
   },
   mint: async (id, arweaveId) => {
     console.log("Started minting", id, "with for arweaveId", arweaveId);

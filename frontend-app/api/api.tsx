@@ -5,8 +5,8 @@ import { fileToBase64 } from '../utils/utils';
 
 export const axiosClient = axios.create({
   baseURL: 'http://localhost:8043',
-  headers:{
-    'Content-Type':'application/json'
+  headers: {
+    'Content-Type': 'application/json',
   },
   timeout: 5000,
 });
@@ -19,7 +19,13 @@ export const postMint = async (url: string, body: MintSubmissionProps) => {
   return res?.data;
 };
 
-export default function useBalance() {
+export function useMintedUploads() {
+  return useQuery('mints', async () => (await axiosClient.get('/mints')).data, {
+    keepPreviousData: true,
+  });
+}
+
+export function useBalance() {
   return useQuery(
     'balance',
     async () => (await axiosClient.get('/status')).data,
