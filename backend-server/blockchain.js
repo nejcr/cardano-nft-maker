@@ -1,9 +1,27 @@
-import { arweave, arweaveKey } from "./config.js";
+import { arweave, arweaveKey, cli, wallet } from "./config.js";
 import { readFileSync, unlinkSync, writeFileSync } from "fs";
 import { UnixFS } from "ipfs-unixfs";
 import dagPB from "ipld-dag-pb";
 
 const { DAGNode } = dagPB;
+
+const signTransaction = (wallet, tx, script) => {
+  return cli.transactionSign({
+    signingKeys: [wallet.payment.skey, wallet.payment.skey],
+    scriptFile: script,
+    txBody: tx,
+  });
+};
+
+const createTransaction = (tx) => {
+  let raw = cli.transactionBuildRaw(tx);
+  let fee = cli.transactionCalculateMinFee({
+    ...tx,
+    txBody: raw,
+  });
+  tx.txOut[0].value.lovelace -= fee;
+  return cli.transactionBuildRaw({ ...tx, fee });
+};
 
 export const blockchain = {
   store: async (id, file) => {
@@ -51,6 +69,32 @@ export const blockchain = {
     return { transaction, ipfsCid };
   },
   mint: async (id, arweaveId) => {
-    console.log("Started minting", id, "with for arweaveId", arweaveId);
+    const mintScript = {
+      keyHash: cli.addressKeyHash(wallet.name),
+      type: "sig",
+    };
+
+    const policy = cli.transactionPolicyid(mintScript);
+    const myNFT = `${policy}.${id}`;
+    const tx = {
+      txIn: wallet.balance().utxo,
+      txOut: [
+        {
+          address: wallet.paymentAddr,
+          value: { ...wallet.balance().value, [myNFT]: 1 },
+        },
+      ],
+      mint: {
+        action: [{ type: "mint", quantity: 1, asset: myNFT }],
+        script: [mintScript],
+      },
+      witnessCount: 2,
+    };
+
+    const raw = createTransaction(tx);
+
+    const signed = signTransaction(wallet, raw, mintScript);
+    const txHash = cli.transactionSubmit(signed);
+    return txHash;
   },
 };

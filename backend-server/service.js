@@ -60,7 +60,7 @@ export const service = {
       })
       .value();
     db.write();
-    blockchain.mint();
+    await blockchain.mint("cund", "cund");
 
     return db.chain.get("mintingRequests").find({ id: id }).value();
   },

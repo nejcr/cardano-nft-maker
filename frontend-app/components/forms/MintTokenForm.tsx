@@ -12,6 +12,7 @@ import {
   Tooltip,
   useColorModeValue,
   useDisclosure,
+  useToast,
   VStack,
 } from '@chakra-ui/react';
 import { FieldArray, Form, Formik } from 'formik';
@@ -51,6 +52,8 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
     setFormConfirmationState(initialFormSubmission);
   };
 
+  const toast = useToast();
+
   const onFormConfirmationOpen = (values: any) => {
     onOpen();
     setFormConfirmationState({ values: values, file: props.file });
@@ -58,7 +61,27 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
 
   const postMintMutation = useMutation(
     (submissionData: MintSubmissionProps) => postMint('/mint', submissionData),
-    { onError: (error:any) => console.log(error?.response.data) }
+    {
+      onSuccess: (res) => {
+        toast({
+          title: 'Succesfully created NFT',
+          description: JSON.stringify(res),
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        });
+        onClose();
+      },
+      onError: (error: any) => {
+        toast({
+          title: 'An error occurred',
+          description: error?.response.data,
+          status: 'error',
+          duration: 3000,
+          isClosable: true,
+        });
+      },
+    }
   );
 
   const fileSrc = URL.createObjectURL(props.file);
@@ -66,7 +89,9 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
   return (
     <Box px={{ base: '4', md: '10' }} py="16" maxWidth="3xl" mx="auto">
       <MintTokenConformationForm
-        onConfirm={() => postMintMutation.mutate(formConfirmationState)}
+        onConfirm={() => {
+          postMintMutation.mutate(formConfirmationState);
+        }}
         isOpen={formConfirmationOpened}
         onClose={onFormConfirmationClose}
       />

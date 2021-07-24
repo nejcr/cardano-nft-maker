@@ -28,8 +28,8 @@ export default function Container({
   children,
 }: ContainerProps) {
   const router = useRouter();
-  const { data, isLoading,isFetching,isPreviousData, isError } = useBalance();
-  const isLoaded = !isLoading && !isError
+  const { data, isLoading, isFetching, isPreviousData, isError } = useBalance();
+  const isLoaded = !isLoading && !isError;
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -48,7 +48,6 @@ export default function Container({
         alignItems={'center'}
         justifyItems={'center'}
       >
-
         {router?.pathname === '/uploads' ? (
           <Heading size={'md'} as={ChakraNextLink} href={'/'}>
             Go to upload
