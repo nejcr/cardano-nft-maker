@@ -9,5 +9,8 @@ export default function Home() {
 }
 
 Home.getInitialProps = async () => {
-  return { title: 'Upload NFT asset to cardano', description: 'Upload NFT asset to cardano with Arweave' };
+  return {
+    title: 'Upload NFT asset to cardano',
+    description: 'Upload NFT asset to cardano with Arweave',
+  };
 };

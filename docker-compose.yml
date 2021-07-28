@@ -48,7 +48,7 @@ services:
     depends_on:
       - backend-server
     ports:
-    - "3001:3000"
+      - "3001:3000"
     networks:
       - backend
 

@@ -1,7 +1,6 @@
 import {
   Box,
   Button,
-  Code,
   Flex,
   Heading,
   Img,
@@ -113,7 +112,7 @@ export const UploadCard = (upload: UploadCardProps) => {
           <Img
             src={upload?.arweaveLink}
             height={'150px'}
-            objectFit={'fill'}
+            objectFit={'contain'}
             borderTopRadius={'2xl'}
             width={'100%'}
           />
