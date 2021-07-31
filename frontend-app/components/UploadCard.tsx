@@ -96,7 +96,7 @@ export const UploadCard = (upload: UploadCardProps) => {
         </ModalContent>
       </Modal>
       <Box
-        bg={'whiteAlpha.100'}
+        bg={'gray.800'}
         borderRadius={'2xl'}
         boxShadow={'2xl'}
         height={'280px'}
@@ -134,9 +134,13 @@ export const UploadCard = (upload: UploadCardProps) => {
 
             <Flex justifyContent={'space-between'}>
               <Heading
+                as={ChakraNextLink}
+                href={'/uploads/' + upload.id}
                 isTruncated
                 maxW={['280px', '250px', '250px', '680px']}
-                size={'md'}
+                color={'white'}
+                textDecoration={'underline'}
+                fontSize={'18px'}
               >
                 {upload?.id}
               </Heading>
@@ -162,7 +166,7 @@ export const UploadCard = (upload: UploadCardProps) => {
             <Button
               size={'sm'}
               rightIcon={<FiCopy />}
-              colorScheme="whiteAlpha"
+              color={'white'}
               onClick={() => onCopyValue(upload?.arweaveLink)}
               variant="solid"
             >

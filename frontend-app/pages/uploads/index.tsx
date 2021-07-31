@@ -1,9 +1,9 @@
 import { Box, SimpleGrid } from '@chakra-ui/react';
 import * as React from 'react';
-import { useMintedUploads } from '../api/api';
-import { UploadCard } from '../components/UploadCard';
+import { useMintedUploads } from '../../api/api';
+import { UploadCard } from '../../components/UploadCard';
 
-export default function Uploads() {
+export default function Index() {
   const { data, isLoading } = useMintedUploads();
 
   return (
@@ -29,7 +29,7 @@ export default function Uploads() {
     </Box>
   );
 }
-Uploads.getInitialProps = async () => {
+Index.getInitialProps = async () => {
   return {
     title: 'Your NFT upload to cardano',
     description: 'Your NFT upload to cardano with cardano-nft-maker',

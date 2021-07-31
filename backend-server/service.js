@@ -36,7 +36,7 @@ export const service = {
         db.read();
         db.chain = lodash.chain(db.data);
         const exists = db.chain.get('mintingRequests').find({ assetName: assetName }).value();
-        console.log(exists);
+
         if (exists) {
             return { status: 400, message: 'NFT with that name already exists', code: 'already_exist' };
         }
@@ -46,6 +46,8 @@ export const service = {
         db.write();
         db.read();
         db.chain = lodash.chain(db.data);
+
+        console.log('Started uploading id', id);
         blockchain.store(id, file).then(({ arweaveTransactionId, ipfsCid }) => {
             const ipfsLink = `https://ipfs.io/ipfs/${ipfsCid}`;
             const arweaveLink = `https://arweave.net/${arweaveTransactionId}`;
@@ -58,6 +60,7 @@ export const service = {
                     arweaveLink: arweaveLink,
                     ipfsHash: ipfsCid,
                     cardanoTransaction: 'not_ready',
+                    cardanoTransactionLink: 'not_ready',
                     ipfsLink: ipfsLink,
                 })
                 .value();

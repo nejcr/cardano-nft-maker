@@ -60,13 +60,16 @@ export const blockchain = {
         }
 
         unlinkSync(fullFileName);
-        return { arweaveTransactionId: transaction.id, ipfsCid };
+        return {arweaveTransactionId: transaction.id, ipfsCid};
     },
-    mint: async ({ name, ipfsCid, arweaveId, providedMetadata }) => {
+    mint: async ({assetName, ipfsCid, arweaveId, providedMetadata}) => {
+        console.log(`Started minting ${assetName} with ipfs:${ipfsCid} and arweawe:${arweaveId}`);
+
+        const {slot: currentSlot} = cli.queryTip();
         const mintScript = {
             type: 'all',
             scripts: [
-                { slot: 41560175 + 632000, type: 'before' },
+                {slot: currentSlot + 10000, type: 'before'},
                 {
                     keyHash: cli.addressKeyHash(wallet.name),
                     type: 'sig',
@@ -75,7 +78,7 @@ export const blockchain = {
         };
 
         const policy = cli.transactionPolicyid(mintScript);
-        const createdNFT = `${policy}.${name}`;
+        const createdNFT = `${policy}.${assetName}`;
 
         const tx = {
             txIn: wallet.balance().utxo,
@@ -92,10 +95,10 @@ export const blockchain = {
             metadata: {
                 721: {
                     [policy]: {
-                        [name]: {
-                            name: name,
-                            image: 'ipfs',
-                            traits: ['Belt', 'Covered Helmet', 'Watch', 'Whoolly Boots', 'Flowers'],
+                        [assetName]: {
+                            name: assetName,
+                            image: ipfsCid,
+                            arweaveId: arweaveId,
                         },
                     },
                 },

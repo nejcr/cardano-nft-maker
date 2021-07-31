@@ -28,6 +28,7 @@ import { formatBytes } from '../../utils/utils';
 import { MintTokenConformationForm } from './MintTokenConformationForm';
 import { postMint } from '../../api/api';
 import { useMutation } from 'react-query';
+import { useRouter } from 'next/router';
 
 export type MintSubmissionProps = {
   values: {
@@ -43,12 +44,15 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
     values: initialFormState,
     file: props.file,
   };
+
+  const router = useRouter();
   const [formConfirmationState, setFormConfirmationState] =
     React.useState<MintSubmissionProps>(initialFormSubmission);
 
   const color = useColorModeValue('gray.500', 'whiteAlpha.600');
   const onFormConfirmationClose = () => {
     onClose();
+    props.onClose();
     setFormConfirmationState(initialFormSubmission);
   };
 
@@ -71,15 +75,18 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
           isClosable: true,
         });
         onClose();
+        props.onClose();
+        router.push('/uploads');
       },
       onError: (error: any) => {
         toast({
           title: 'An error occurred',
-          description: error?.response.data,
+          description: JSON.stringify(error?.response?.data),
           status: 'error',
           duration: 3000,
           isClosable: true,
         });
+        onClose();
       },
     }
   );
