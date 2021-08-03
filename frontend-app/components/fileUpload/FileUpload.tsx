@@ -70,9 +70,8 @@ const FileUpload = ({ onFileSelect }: { onFileSelect: EventHandler<any> }) => {
               </Box>
               <Stack p="8" textAlign="center" spacing="1">
                 <Heading fontSize="lg" color="gray.500" fontWeight="bold">
-                  Drop images here
+                  Upload to arweave
                 </Heading>
-                <Text fontWeight="light">or click to upload</Text>
               </Stack>
             </Stack>
           </Box>

@@ -1,4 +1,4 @@
-import { Box, SimpleGrid } from '@chakra-ui/react';
+import { Box, Center, Heading, SimpleGrid } from '@chakra-ui/react';
 import * as React from 'react';
 import { useMintedUploads } from '../../api/api';
 import { UploadCard } from '../../components/UploadCard';
@@ -8,24 +8,39 @@ export default function Index() {
 
   return (
     <Box>
-      <SimpleGrid
-        p={[6, 12]}
-        columns={[1, 1, 2, 3, 5]}
-        spacing={[6, 12]}
-        bg="blue.800"
-        color="white"
-        maxH={'89.3vh'}
-        overflowY={'auto'}
-      >
-        {data?.map((upload: any) => (
-          <UploadCard
-            id={upload?.id}
-            arweaveLink={upload.arweaveLink}
-            cardanoTransaction={upload?.cardanoTransaction}
-            ipfsLink={upload?.ipfsLink}
-          />
-        ))}
-      </SimpleGrid>
+      {data?.length === 0 ? (
+        <Center
+          h={'89.3vh'}
+          bg="blue.800"
+          color="white"
+          axis={'both'}
+          width={'100%'}
+        >
+          <Heading width={'100%'} textAlign={'center'}>
+            No assets were created
+          </Heading>
+        </Center>
+      ) : (
+        <SimpleGrid
+          p={[6, 12]}
+          columns={[1, 1, 2, 3, 5]}
+          spacing={[6, 12]}
+          bg="blue.800"
+          color="white"
+          h={'89.3vh'}
+          overflowY={'auto'}
+        >
+          {data?.map((upload: any) => (
+            <UploadCard
+              id={upload?.id}
+              assetName={upload?.assetName}
+              arweaveLink={upload.arweaveLink}
+              cardanoTransaction={upload?.cardanoTransaction}
+              ipfsLink={upload?.ipfsLink}
+            />
+          ))}
+        </SimpleGrid>
+      )}
     </Box>
   );
 }

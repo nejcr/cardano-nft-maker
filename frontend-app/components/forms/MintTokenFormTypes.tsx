@@ -7,7 +7,7 @@ interface FieldGroupProps extends StackProps {
 }
 
 export interface MintTokenFormProps {
-  file: File;
+  file?: File;
   onClose: Function;
 }
 

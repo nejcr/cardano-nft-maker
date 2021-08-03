@@ -24,6 +24,7 @@ import { ChakraNextLink } from './ChrakraNextLink';
 
 export type UploadCardProps = {
   id: string;
+  assetName: string;
   arweaveLink: string;
   cardanoTransaction: string;
   ipfsLink: string;
@@ -139,10 +140,11 @@ export const UploadCard = (upload: UploadCardProps) => {
                 isTruncated
                 maxW={['280px', '250px', '250px', '680px']}
                 color={'white'}
+                py={0.5}
                 textDecoration={'underline'}
-                fontSize={'18px'}
+                fontSize={'22px'}
               >
-                {upload?.id}
+                {upload?.assetName}
               </Heading>
               <Box
                 as={FiCopy}

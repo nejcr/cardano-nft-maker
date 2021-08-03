@@ -8,10 +8,12 @@ const arweaveKeyInFile = fs.readFileSync('./arweave-key.json', 'utf8');
 export const arweaveKey = JSON.parse(arweaveKeyInFile);
 const dir = process.env.NETWORK === 'mainnet' ? './mainnet' : './testnet';
 const network = process.env.NETWORK === 'mainnet' ? 'mainnet' : 'testnet-magic 1097911063';
+export const explorerLink =
+    process.env.NETWORK === 'mainnet' ? 'https://explorer.cardano.org/en/transaction?id=' : 'https://explorer.cardano-testnet.iohkdev.io/en/transaction?id=';
 
 const shelleyGenesisPath = process.env.NETWORK === 'mainnet' ? './mainnet-shelley-genesis.json' : './testnet-shelley-genesis.json';
 
-const walletName = process.env.NETWORK === 'mainnet' ? 'main' : 'test';
+export const walletName = process.env.NETWORK === 'mainnet' ? 'main' : 'test';
 
 const dbName = process.env.NETWORK === 'mainnet' ? 'main-db.json' : 'test-db.json';
 

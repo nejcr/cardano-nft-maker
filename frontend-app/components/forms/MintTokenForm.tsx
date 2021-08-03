@@ -35,14 +35,14 @@ export type MintSubmissionProps = {
     assetName: string;
     metadata: Array<{ key: string; value: string }>;
   };
-  file: File;
+  file: File | { ipfsHash: string };
 };
 export const MintTokenForm = (props: MintTokenFormProps) => {
   const { isOpen: formConfirmationOpened, onOpen, onClose } = useDisclosure();
-  const initialFormState = { assetName: '', metadata: [] };
+  const initialFormState = { assetName: '', metadata: [], ipfsHash: '' };
   const initialFormSubmission = {
     values: initialFormState,
-    file: props.file,
+    file: props.file ?? { ipfsHash: '' },
   };
 
   const router = useRouter();
@@ -60,7 +60,12 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
 
   const onFormConfirmationOpen = (values: any) => {
     onOpen();
-    setFormConfirmationState({ values: values, file: props.file });
+    const { ipfsHash, ...rest } = values;
+    console.log('setting', ipfsHash);
+    setFormConfirmationState({
+      values: rest,
+      file: props.file ?? { ipfsHash: ipfsHash ?? '' },
+    });
   };
 
   const postMintMutation = useMutation(
@@ -76,7 +81,7 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
         });
         onClose();
         props.onClose();
-        router.push('/uploads');
+        router.push(`/uploads/${res?.data?.id}`);
       },
       onError: (error: any) => {
         toast({
@@ -90,8 +95,11 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
       },
     }
   );
+  let fileSrc: string;
 
-  const fileSrc = URL.createObjectURL(props.file);
+  if (props.file instanceof File) {
+    fileSrc = URL.createObjectURL(props.file);
+  }
 
   return (
     <Box px={{ base: '4', md: '10' }} py="16" maxWidth="3xl" mx="auto">
@@ -194,57 +202,64 @@ export const MintTokenForm = (props: MintTokenFormProps) => {
                     />
                   </VStack>
                 </FieldGroup>
-                <FieldGroup title="Asset">
-                  <Stack
-                    direction="row"
-                    spacing="6"
-                    align="center"
-                    width="full"
-                    justifyContent={'flex-end'}
-                  >
-                    <Tooltip
-                      padding={0}
-                      label={
-                        <Image
-                          objectFit="cover"
-                          boxSize="300px"
-                          alt={'Your uploaded image preview'}
+                {props.file instanceof File ? (
+                  <FieldGroup title="Asset">
+                    <Stack
+                      direction="row"
+                      spacing="6"
+                      align="center"
+                      width="full"
+                      justifyContent={'flex-end'}
+                    >
+                      <Tooltip
+                        padding={0}
+                        label={
+                          <Image
+                            objectFit="cover"
+                            boxSize="300px"
+                            alt={'Your uploaded image preview'}
+                            src={fileSrc}
+                          />
+                        }
+                        fontSize="md"
+                        placement={'top-end'}
+                      >
+                        <Avatar
+                          size="xl"
+                          name="Your uploaded image"
                           src={fileSrc}
                         />
-                      }
-                      fontSize="md"
-                      placement={'top-end'}
-                    >
-                      <Avatar
-                        size="xl"
-                        name="Your uploaded image"
-                        src={fileSrc}
-                      />
-                    </Tooltip>
+                      </Tooltip>
 
-                    <Box>
-                      <HStack spacing="5" justifyContent={'end'}>
-                        <Heading
-                          as="h3"
-                          size="lg"
-                          isTruncated
-                          maxW={['150px', '200px', '300px']}
+                      <Box>
+                        <HStack spacing="5" justifyContent={'end'}>
+                          <Heading
+                            as="h3"
+                            size="lg"
+                            isTruncated
+                            maxW={['150px', '200px', '300px']}
+                          >
+                            {props.file?.name}
+                          </Heading>
+                        </HStack>
+                        <Text
+                          fontSize="sm"
+                          mt="1"
+                          textAlign={'right'}
+                          mr={3}
+                          color={color}
                         >
-                          {props.file?.name}
-                        </Heading>
-                      </HStack>
-                      <Text
-                        fontSize="sm"
-                        mt="1"
-                        textAlign={'right'}
-                        mr={3}
-                        color={color}
-                      >
-                        {props.file?.type} | {formatBytes(props?.file?.size, 3)}
-                      </Text>
-                    </Box>
-                  </Stack>
-                </FieldGroup>
+                          {props.file?.type} |{' '}
+                          {formatBytes(props?.file?.size, 3)}
+                        </Text>
+                      </Box>
+                    </Stack>
+                  </FieldGroup>
+                ) : (
+                  <VStack width="full" spacing="6">
+                    <InputControl name={'ipfsHash'} label="IPFS Hash" />
+                  </VStack>
+                )}
                 <FieldGroup mt="8">
                   <HStack width="full" justifyContent={'flex-end'}>
                     <Button type="submit" colorScheme="blue">

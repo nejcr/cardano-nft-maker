@@ -13,7 +13,12 @@ export const axiosClient = axios.create({
 
 export const postMint = async (url: string, body: MintSubmissionProps) => {
   const { values, file: pureFile } = body;
-  const file = await fileToBase64(pureFile);
+  let file;
+  if (pureFile instanceof File) {
+    file = await fileToBase64(pureFile);
+  } else {
+    file = pureFile;
+  }
 
   const res = await axiosClient.post('/mint', { file, ...values });
   return res?.data;

@@ -27,12 +27,19 @@ app.get('/mints', async (req, res) => {
 });
 
 app.post('/mint', mintRequestValidationSchema, apiErrorHandler, async (req, res) => {
-    const mintResponse = await service.createMint(req.body);
-    return res.send(mintResponse);
+    console.log('got request', req.body);
+    if (req.body.hasOwnProperty('file') && req.body.file.hasOwnProperty('ipfsHash')) {
+        const ipfsHash = req.body.file.ipfsHash;
+        if (ipfsHash?.trim().length === 0) {
+            return res.status(400).send({ message: 'IPFS hash should not be empty' });
+        }
+    }
+    const { status, ...rest } = await service.createMint(req.body);
+    console.log(status, rest);
+    return res.status(status).send(rest);
 });
 
 app.use((err, req, res, next) => {
-    console.log('wtf', err);
     if (err instanceof SyntaxError && 'body' in err) {
         console.error(err);
         return res.status(400).send({ status: 400, message: err.message }); // Bad request

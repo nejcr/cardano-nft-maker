@@ -1,4 +1,4 @@
-import { arweave, arweaveKey, cli, wallet } from './config.js';
+import { arweave, arweaveKey, cli, walletName } from './config.js';
 import { readFileSync, unlinkSync, writeFileSync } from 'fs';
 import { UnixFS } from 'ipfs-unixfs';
 import dagPB from 'ipld-dag-pb';
@@ -63,9 +63,15 @@ export const blockchain = {
         return {arweaveTransactionId: transaction.id, ipfsCid};
     },
     mint: async ({assetName, ipfsCid, arweaveId, providedMetadata}) => {
+        await new Promise((r) => setTimeout(r, 200));
         console.log(`Started minting ${assetName} with ipfs:${ipfsCid} and arweawe:${arweaveId}`);
 
+        const arweaveData = arweaveId ? {arweaveId: arweaveId} : {};
+        const metadata = providedMetadata && Object.keys(providedMetadata).length > 0 ? {metadata: providedMetadata} : {};
+
         const {slot: currentSlot} = cli.queryTip();
+        const wallet = cli.wallet(walletName);
+
         const mintScript = {
             type: 'all',
             scripts: [
@@ -81,6 +87,7 @@ export const blockchain = {
         const createdNFT = `${policy}.${assetName}`;
 
         const tx = {
+            invalidAfter: currentSlot + 10000,
             txIn: wallet.balance().utxo,
             txOut: [
                 {
@@ -98,7 +105,8 @@ export const blockchain = {
                         [assetName]: {
                             name: assetName,
                             image: ipfsCid,
-                            arweaveId: arweaveId,
+                            ...metadata,
+                            ...arweaveData,
                         },
                     },
                 },
@@ -108,6 +116,7 @@ export const blockchain = {
 
         const raw = createTransaction(tx);
         const signed = signTransaction(wallet, raw, mintScript);
+
         return cli.transactionSubmit(signed);
     },
 };
