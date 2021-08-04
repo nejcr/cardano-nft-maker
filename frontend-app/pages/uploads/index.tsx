@@ -5,7 +5,7 @@ import { UploadCard } from '../../components/UploadCard';
 
 export default function Index() {
   const { data, isLoading } = useMintedUploads();
-
+  console.log(process.env);
   return (
     <Box>
       {data?.length === 0 ? (
@@ -32,6 +32,7 @@ export default function Index() {
         >
           {data?.map((upload: any) => (
             <UploadCard
+              key={upload.id}
               id={upload?.id}
               assetName={upload?.assetName}
               arweaveLink={upload.arweaveLink}

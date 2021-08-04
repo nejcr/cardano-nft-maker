@@ -4,7 +4,7 @@ import { MintSubmissionProps } from '../components/forms/MintTokenForm';
 import { fileToBase64 } from '../utils/utils';
 
 export const axiosClient = axios.create({
-  baseURL: 'http://localhost:8043',
+  baseURL: `http://localhost:${process.env.API_PORT ?? '8043'}`,
   headers: {
     'Content-Type': 'application/json',
   },

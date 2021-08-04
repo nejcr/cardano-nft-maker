@@ -60,22 +60,22 @@ export const blockchain = {
         }
 
         unlinkSync(fullFileName);
-        return {arweaveTransactionId: transaction.id, ipfsCid};
+        return { arweaveTransactionId: transaction.id, ipfsCid };
     },
-    mint: async ({assetName, ipfsCid, arweaveId, providedMetadata}) => {
+    mint: async ({ assetName, ipfsCid, arweaveId, providedMetadata }) => {
         await new Promise((r) => setTimeout(r, 200));
         console.log(`Started minting ${assetName} with ipfs:${ipfsCid} and arweawe:${arweaveId}`);
 
-        const arweaveData = arweaveId ? {arweaveId: arweaveId} : {};
-        const metadata = providedMetadata && Object.keys(providedMetadata).length > 0 ? {metadata: providedMetadata} : {};
+        const arweaveData = arweaveId ? { arweaveId: arweaveId } : {};
+        const metadata = providedMetadata && Object.keys(providedMetadata).length > 0 ? { metadata: providedMetadata } : {};
 
-        const {slot: currentSlot} = cli.queryTip();
+        const { slot: currentSlot } = cli.queryTip();
         const wallet = cli.wallet(walletName);
 
         const mintScript = {
             type: 'all',
             scripts: [
-                {slot: currentSlot + 10000, type: 'before'},
+                { slot: currentSlot + 10000, type: 'before' },
                 {
                     keyHash: cli.addressKeyHash(wallet.name),
                     type: 'sig',

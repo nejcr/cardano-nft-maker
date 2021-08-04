@@ -36,6 +36,7 @@ services:
       - ${WORKING_DIR}/node-${NETWORK}-db:/data
       - ${WORKING_DIR}/node-ipc:/ipc
       - node-config:/nix/store
+    restart: always
     networks:
       - backend
 
@@ -45,6 +46,8 @@ services:
       context: frontend-app
       dockerfile: Dockerfile
     container_name: frontend-app
+    environment:
+      API_PORT: 8042
     depends_on:
       - backend-server
     ports:

@@ -41,7 +41,7 @@ export const UploadCard = (upload: UploadCardProps) => {
   };
 
   return (
-    <>
+    <Box>
       <Modal size={'3xl'} isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
@@ -186,6 +186,6 @@ export const UploadCard = (upload: UploadCardProps) => {
           </Stack>
         </VStack>
       </Box>
-    </>
+    </Box>
   );
 };

@@ -26,6 +26,20 @@ chmod +x ./run_backend_dev_environment.sh
 ./run_backend_dev_environment.sh
 ```
 
+## Running
+
+To run the entire app altogether first copy all the private keys from the specific environment to the appropriate file
+in [keys](keys) directory, then run the following script.
+
+```sh
+chmod +x ./run_backend_dev_environment.sh
+./run_solution.sh
+```
+
+## Example
+
+[![Cardano nft maker demonstration](https://img.youtube.com/vi/q7dAYnd6LXc/0.jpg)](https://www.youtube.com/watch?v=q7dAYnd6LXc)
+
 ## Author
 
 👤 **Nejc Ravnik**

@@ -1,26 +1,26 @@
 {
-  "name": "cardano-nft-maker-backend-server",
-  "version": "1.0.0",
-  "description": "A backend server for interacting with cardano node",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "nejcr",
-  "license": "MIT",
-  "dependencies": {
-    "arweave": "^1.10.15",
-    "cardanocli-js": "^3.1.2",
-    "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "express-validator": "^6.12.0",
-    "ipfs-unixfs": "^5.0.0",
-    "ipld-dag-pb": "^0.22.2",
-    "lodash": "^4.17.21",
-    "lowdb": "^2.1.0",
-    "node": "^16.4.0",
-    "prettier": "^2.3.2",
-    "uuid": "^8.3.2"
-  },
-  "type": "module"
+    "name": "cardano-nft-maker-backend-server",
+    "version": "1.0.0",
+    "description": "A backend server for interacting with cardano node",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "nejcr",
+    "license": "MIT",
+    "dependencies": {
+        "arweave": "^1.10.15",
+        "cardanocli-js": "^3.1.2",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "express-validator": "^6.12.0",
+        "ipfs-unixfs": "^5.0.0",
+        "ipld-dag-pb": "^0.22.2",
+        "lodash": "^4.17.21",
+        "lowdb": "^2.1.0",
+        "node": "^16.4.0",
+        "prettier": "^2.3.2",
+        "uuid": "^8.3.2"
+    },
+    "type": "module"
 }
