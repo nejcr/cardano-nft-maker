@@ -37,6 +37,7 @@ chmod +x ./run_backend_dev_environment.sh
 ```
 
 ## Example
+[Click to play](https://www.youtube.com/watch?v=q7dAYnd6LXc)
 
 [![Cardano nft maker demonstration](https://img.youtube.com/vi/q7dAYnd6LXc/0.jpg)](https://www.youtube.com/watch?v=q7dAYnd6LXc)
 
