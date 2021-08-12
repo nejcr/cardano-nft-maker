@@ -17,7 +17,7 @@ export const mintRequestValidationSchema = [
             max: 16,
         })
         .withMessage('must be between 3 and 16'),
-    check('metadata', 'passwordConfirmation field must have the same value as the password field')
+    check('metadata', 'metadata field is not valid')
         .exists()
         .custom((value, { req }) => {
             const field = req.body?.metadata;
